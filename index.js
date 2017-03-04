@@ -36,7 +36,6 @@ module.exports = function reallySecure (options) {
                     var imgSrc = options.csp.imgSrc || ["'self'"];
 
                     var hostnameParts = parseDomain(req.hostname);
-                    console.log(hostnameParts);
                     if(hostnameParts) {
                       var hostname = hostnameParts.domain + '.' + hostnameParts.tld;
                     } else {
