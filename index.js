@@ -4,6 +4,7 @@ var enforce = require('express-sslify');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
 var uuid = require('node-uuid');
+var parseDomain = require("parse-domain");
 
 module.exports = function reallySecure (options) {
   options = options || {}
@@ -34,21 +35,14 @@ module.exports = function reallySecure (options) {
                     var fontSrc = options.csp.fontSrc || ["'self'"];
                     var imgSrc = options.csp.imgSrc || ["'self'"];
 
-                    if(!req.hostname.startsWith("api.")) {
-                      defaultSrc.push("api." + req.hostname);
-                    }
-                    if(!req.hostname.startsWith("script.")) {
-                      scriptSrc.push("script." + req.hostname);
-                    }
-                    if(!req.hostname.startsWith("sytle.")) {
-                      styleSrc.push("sytle." + req.hostname);
-                    }
-                    if(!req.hostname.startsWith("font.")) {
-                      fontSrc.push("font." + req.hostname);
-                    }
-                    if(!req.hostname.startsWith("img.")) {
-                      imgSrc.push("img." + req.hostname);
-                    }
+                    var hostnameParts = parseDomain(req.hostname);
+                    var hostname = hostnameParts.domain + '.' + hostnameParts.tld;
+
+                    if(!defaultSrc.indexOf("api." + hostname)) defaultSrc.push("api." + hostname);
+                    if(!scriptSrc.indexOf("script." + hostname)) scriptSrc.push("script." + hostname);
+                    if(!styleSrc.indexOf("sytle." + hostname)) styleSrc.push("sytle." + hostname);
+                    if(!fontSrc.indexOf("font." + hostname)) fontSrc.push("font." + hostname);
+                    if(!imgSrc.indexOf("img." + hostname)) imgSrc.push("img." + hostname);
 
                     csp({
                       // Specify directives as normal.

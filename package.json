@@ -25,6 +25,7 @@
     "express-sslify": "^1.2.0",
     "helmet": "^3.4.1",
     "helmet-csp": "^2.3.0",
-    "node-uuid": "^1.4.7"
+    "node-uuid": "^1.4.7",
+    "parse-domain": "^1.1.0"
   }
 }
