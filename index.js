@@ -43,7 +43,9 @@ module.exports = function reallySecure (options) {
                       var hostname = req.hostname;
                     }
 
-                    if(hostname !== 'localhost') {
+                    var noSubs = ['localhost', 'appspot.com'];
+
+                    if(!noSubs.includes(hostname)) {
                       if(defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
                       if(scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
                       if(styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
