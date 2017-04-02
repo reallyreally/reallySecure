@@ -55,7 +55,7 @@ module.exports = function reallySecure (options) {
                       upgradeInsecureRequests = false;
                     }
 
-                    csp({
+                    var cspConfig = {
                       // Specify directives as normal.
                       directives: {
                         defaultSrc: defaultSrc,
@@ -88,10 +88,14 @@ module.exports = function reallySecure (options) {
                       // Set to false if you want to completely disable any user-agent sniffing.
                       // This may make the headers less compatible but it will be much faster.
                       // This defaults to `true`.
-                      browserSniff: true,
+                      browserSniff: true
+                    };
 
-                      upgradeInsecureRequests: upgradeInsecureRequests
-                    })(req, res, next);
+                    if(upgradeInsecureRequests) {
+                      cspConfig.directives.upgradeInsecureRequests = true
+                    }
+
+                    csp(cspConfig)(req, res, next);
                   });
                 });
               });
