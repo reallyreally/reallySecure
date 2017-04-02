@@ -42,11 +42,13 @@ module.exports = function reallySecure (options) {
                       var hostname = req.hostname;
                     }
 
-                    if(defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
-                    if(scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
-                    if(styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
-                    if(fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
-                    if(imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
+                    if(hostname !== 'localhost') {
+                      if(defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
+                      if(scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
+                      if(styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
+                      if(fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
+                      if(imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
+                    }                      
 
                     csp({
                       // Specify directives as normal.
