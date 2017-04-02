@@ -61,11 +61,11 @@ module.exports = function reallySecure (options) {
                         styleSrc: styleSrc,
                         fontSrc: fontSrc,
                         imgSrc: imgSrc,
-                        sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
-                        reportUri: options.csp.reportUri || '/report-violation',
-                        objectSrc: options.csp.objectSrc || ["'none'"],
-                        upgradeInsecureRequests: upgradeInsecureRequests
+                        objectSrc: options.csp.objectSrc || ["'none'"]
                       },
+
+                      sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
+                      reportUri: options.csp.reportUri || '/report-violation',
 
                       // This module will detect common mistakes in your directives and throw errors
                       // if it finds any. To disable this, enable "loose mode".
@@ -86,7 +86,9 @@ module.exports = function reallySecure (options) {
                       // Set to false if you want to completely disable any user-agent sniffing.
                       // This may make the headers less compatible but it will be much faster.
                       // This defaults to `true`.
-                      browserSniff: true
+                      browserSniff: true,
+
+                      upgradeInsecureRequests: upgradeInsecureRequests
                     })(req, res, next);
                   });
                 });
