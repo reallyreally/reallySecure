@@ -1,5 +1,5 @@
 {
-  "name": "really-secure",
+  "name": "@really/really-secure",
   "version": "1.0.0",
   "description": "ExpressJS Security Middleware",
   "main": "index.js",
