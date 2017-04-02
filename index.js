@@ -34,6 +34,7 @@ module.exports = function reallySecure (options) {
                     var styleSrc = options.csp.styleSrc || ["'self'"];
                     var fontSrc = options.csp.fontSrc || ["'self'"];
                     var imgSrc = options.csp.imgSrc || ["'self'"];
+                    var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
                     var hostnameParts = parseDomain(req.hostname);
                     if(hostnameParts) {
@@ -48,7 +49,9 @@ module.exports = function reallySecure (options) {
                       if(styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
                       if(fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
                       if(imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
-                    }                      
+                    } else {
+                      upgradeInsecureRequests = false;
+                    }
 
                     csp({
                       // Specify directives as normal.
@@ -61,7 +64,7 @@ module.exports = function reallySecure (options) {
                         sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
                         reportUri: options.csp.reportUri || '/report-violation',
                         objectSrc: options.csp.objectSrc || ["'none'"],
-                        upgradeInsecureRequests: true
+                        upgradeInsecureRequests: upgradeInsecureRequests
                       },
 
                       // This module will detect common mistakes in your directives and throw errors
