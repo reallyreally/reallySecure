@@ -42,6 +42,13 @@ module.exports = function reallySecure(options) {
 										var styleSrc = options.csp.styleSrc || ["'self'"];
 										var fontSrc = options.csp.fontSrc || ["'self'"];
 										var imgSrc = options.csp.imgSrc || ["'self'"];
+
+										defaultSrc.push("'nonce-" + res.locals.nonce + "'");
+										scriptSrc.push("'nonce-" + res.locals.nonce + "'");
+										styleSrc.push("'nonce-" + res.locals.nonce + "'");
+										fontSrc.push("'nonce-" + res.locals.nonce + "'");
+										imgSrc.push("'nonce-" + res.locals.nonce + "'");
+
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
 										var hostnameParts = parseDomain(req.hostname);
