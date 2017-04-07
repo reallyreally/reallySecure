@@ -13,6 +13,7 @@ module.exports = function reallySecure(options) {
 
 		var makeSecure = function() {
 			res.locals.nonce = uuid.v4();
+			var nonceArray = [res.locals.nonce];
 			// Sets "X-DNS-Prefetch-Control: on".
 			helmet.dnsPrefetchControl({
 				allow: true
@@ -37,17 +38,12 @@ module.exports = function reallySecure(options) {
 									// Sets "X-XSS-Protection: 1; mode=block".
 									helmet.xssFilter()(req, res, function() {
 										if (options.csp === undefined) options.csp = {};
+
 										var defaultSrc = options.csp.defaultSrc || ["'self'"];
 										var scriptSrc = options.csp.scriptSrc || ["'self'"];
 										var styleSrc = options.csp.styleSrc || ["'self'"];
 										var fontSrc = options.csp.fontSrc || ["'self'"];
 										var imgSrc = options.csp.imgSrc || ["'self'"];
-
-										defaultSrc.push("'nonce-" + res.locals.nonce + "'");
-										scriptSrc.push("'nonce-" + res.locals.nonce + "'");
-										styleSrc.push("'nonce-" + res.locals.nonce + "'");
-										fontSrc.push("'nonce-" + res.locals.nonce + "'");
-										imgSrc.push("'nonce-" + res.locals.nonce + "'");
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
@@ -75,11 +71,11 @@ module.exports = function reallySecure(options) {
 										var cspConfig = {
 											// Specify directives as normal.
 											directives: {
-												defaultSrc: defaultSrc,
-												scriptSrc: scriptSrc,
-												styleSrc: styleSrc,
-												fontSrc: fontSrc,
-												imgSrc: imgSrc,
+												defaultSrc: defaultSrc.concat(nonceArray),
+												scriptSrc: scriptSrc.concat(nonceArray),
+												styleSrc: styleSrc.concat(nonceArray),
+												fontSrc: fontSrc.concat(nonceArray),
+												imgSrc: imgSrc.concat(nonceArray),
 												objectSrc: options.csp.objectSrc || ["'none'"]
 											},
 
