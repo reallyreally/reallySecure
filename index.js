@@ -13,7 +13,7 @@ module.exports = function reallySecure(options) {
 
 		var makeSecure = function() {
 			res.locals.nonce = uuid.v4();
-			var nonceArray = [res.locals.nonce];
+			var nonceArray = ["'nonce-"+res.locals.nonce+"'"];
 			// Sets "X-DNS-Prefetch-Control: on".
 			helmet.dnsPrefetchControl({
 				allow: true
