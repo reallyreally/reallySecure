@@ -63,6 +63,15 @@ Now add it to the application flow
 app.use(securityLayer(reallySecureConfig));
 ```
 
+**Using Google Cloud App Engine?**
+
+You will need to trust the proxy or you will end up with SSL issues.
+
+```
+// Trust App Engine proxy
+app.enable('trust proxy')
+```
+
 ### Example app.js
 
 Your app.js may end up looking like this
@@ -134,6 +143,93 @@ module.exports = app;
 
 ```
 
+## Using a nonce
+
+For your security pleasure - we generate a nonce for each request. Where your site has inline script or other elements, and those elements are inserted intentionally - you can use the nonce to validate the insertion.
+
+The nonce is automatically added to all the CSP types, so no extra work is required here. The nonce value is available in `res.locals` - as `res.locals.nonce`.
+
+If you are using handlebars - you might end up with something like this `layout.hbs` example. (Note the `<script nonce="{{ nonce }}">`)
+
+```
+<!doctype html>
+<html class="no-js" lang="en-US">
+    <head>
+      <!-- Google Tag Manager -->
+      <script nonce="{{ nonce }}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-A0A0000');</script>
+      <!-- End Google Tag Manager -->
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Example Layout</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe nonce="{{ nonce }}" src="https://www.googletagmanager.com/ns.html?id=GTM-A0A0000"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <!-- End Google Tag Manager (noscript) -->
+        <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+{{{body}}}
+    </body>
+</html>
+```
+
+## Configuration
+
+Apart from the example above - configuration is typically passed to each component. A more exhaustive example would be:
+
+```
+{
+  "csp":{
+    "fontSrc":[
+      "'self'",
+      "fonts.gstatic.com"
+    ],
+    "imgSrc":[
+      "'self'",
+      "data:",
+      "platform.slack-edge.com",
+      "www.google-analytics.com",
+      "stats.g.doubleclick.net",
+      "www.google.com"
+    ],
+    "defaultSrc":[
+      "'self'"
+    ],
+    "reportUri":"/v1/cspreport",
+    "styleSrc":[
+      "'self'",
+      "fonts.googleapis.com",
+      "'sha256-tFH5KRmizb/+eruMkSeYor+UVhiMbPUtVTRTEMsQopc='",
+      "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='"
+    ],
+    "scriptSrc":[
+      "'self'",
+      "www.googletagmanager.com"
+    ],
+    "upgradeInsecureRequests":true
+  },
+  "hsts":{
+    "maxAge":10886400,
+    "includeSubDomains":true,
+    "preload":true,
+    "force":true
+  },
+  "poweredBy":"really-secure"
+}
+```
+
+**Another note about HSTS**
+
+This example would activate HSTS. It is important that you only do this knowing what the implication for your whole domain / environment is. It will (for example) break Google's G Suite domain redirection if you use this on your base domain.
+
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
@@ -141,6 +237,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Troy Kelly** - *Initial work* - [troykelly](https://github.com/troykelly)
+* **Daniel Walton** - [imdanwalton](https://github.com/imdanwalton)
 
 See also the list of [contributors](https://github.com/reallyreally/reallySecure/contributors) who participated in this project.
 

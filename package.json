@@ -1,7 +1,7 @@
 {
   "name": "@really/really-secure",
   "version": "1.0.3",
-  "description": "ExpressJS Security Middleware",
+  "description": "Comprehensive ExpressJS Security Middleware",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,7 +15,11 @@
     "expressjs",
     "middleware"
   ],
-  "author": "Troy Kelly",
+  "author": "Troy Kelly <troy.kelly@reallyreally.io>",
+  "contributors": [{
+    "name": "Daniel Walton",
+    "email": "daniel.walton@reallyreally.io"
+    }],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/reallyreally/reallySecure/issues"
