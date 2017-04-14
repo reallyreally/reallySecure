@@ -38,7 +38,7 @@ Now you should be able to add it to your application layer
 In your app.js require the package
 
 ```
-var securityLayer = require('really-secure');
+var securityLayer = require('@really/really-secure');
 ```
 
 Prepare your configuration
@@ -75,7 +75,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var securityLayer = require('really-secure');
+var securityLayer = require('@really/really-secure');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
