@@ -40,6 +40,7 @@ module.exports = function reallySecure(options) {
 										if (options.csp === undefined) options.csp = {};
 
 										var defaultSrc = options.csp.defaultSrc || ["'self'"];
+										var connectSrc = options.csp.connectSrc || ["'self'"];
 										var scriptSrc = options.csp.scriptSrc || ["'self'"];
 										var styleSrc = options.csp.styleSrc || ["'self'"];
 										var fontSrc = options.csp.fontSrc || ["'self'"];
@@ -58,6 +59,7 @@ module.exports = function reallySecure(options) {
 
 										if (!noSubs.includes(hostname)) {
 											if (defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
+											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);											
 											if (scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
 											if (styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
 											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
@@ -72,6 +74,7 @@ module.exports = function reallySecure(options) {
 											// Specify directives as normal.
 											directives: {
 												defaultSrc: defaultSrc.concat(nonceArray),
+												connectSrc: connectSrc.concat(nonceArray),
 												scriptSrc: scriptSrc.concat(nonceArray),
 												styleSrc: styleSrc.concat(nonceArray),
 												fontSrc: fontSrc.concat(nonceArray),
