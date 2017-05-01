@@ -45,6 +45,7 @@ module.exports = function reallySecure(options) {
 										var styleSrc = options.csp.styleSrc || ["'self'"];
 										var fontSrc = options.csp.fontSrc || ["'self'"];
 										var imgSrc = options.csp.imgSrc || ["'self'"];
+										var objectSrc = options.csp.objectSrc || ["'none'"];
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
@@ -59,7 +60,7 @@ module.exports = function reallySecure(options) {
 
 										if (!noSubs.includes(hostname)) {
 											if (defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
-											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);											
+											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
 											if (scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
 											if (styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
 											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
@@ -73,13 +74,13 @@ module.exports = function reallySecure(options) {
 										var cspConfig = {
 											// Specify directives as normal.
 											directives: {
-												defaultSrc: defaultSrc.concat(nonceArray),
-												connectSrc: connectSrc.concat(nonceArray),
-												scriptSrc: scriptSrc.concat(nonceArray),
-												styleSrc: styleSrc.concat(nonceArray),
-												fontSrc: fontSrc.concat(nonceArray),
-												imgSrc: imgSrc.concat(nonceArray),
-												objectSrc: options.csp.objectSrc || ["'none'"]
+												defaultSrc: (!defaultSrc.includes("'unsafe-inline'") && !defaultSrc.includes("'none'"))?defaultSrc.concat(nonceArray):defaultSrc,
+												connectSrc: (!connectSrc.includes("'unsafe-inline'") && !connectSrc.includes("'none'"))?connectSrc.concat(nonceArray):connectSrc,
+												scriptSrc: (!scriptSrc.includes("'unsafe-inline'") && !scriptSrc.includes("'none'"))?scriptSrc.concat(nonceArray):scriptSrc,
+												styleSrc: (!styleSrc.includes("'unsafe-inline'") && !styleSrc.includes("'none'"))?styleSrc.concat(nonceArray):styleSrc,
+												fontSrc: (!fontSrc.includes("'unsafe-inline'") && !fontSrc.includes("'none'"))?fontSrc.concat(nonceArray):fontSrc,
+												imgSrc: (!imgSrc.includes("'unsafe-inline'") && !imgSrc.includes("'none'"))?imgSrc.concat(nonceArray):imgSrc,
+												objectSrc: (!objectSrc.includes("'unsafe-inline'") && !objectSrc.includes("'none'"))?objectSrc.concat(nonceArray):objectSrc
 											},
 
 											sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
