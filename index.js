@@ -46,6 +46,7 @@ module.exports = function reallySecure(options) {
 										var fontSrc = options.csp.fontSrc || ["'self'"];
 										var imgSrc = options.csp.imgSrc || ["'self'"];
 										var objectSrc = options.csp.objectSrc || ["'none'"];
+										var frameSrc = options.csp.frameSrc || ["'none'"];
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
@@ -80,7 +81,8 @@ module.exports = function reallySecure(options) {
 												styleSrc: (!styleSrc.includes("'unsafe-inline'") && !styleSrc.includes("'none'"))?styleSrc.concat(nonceArray):styleSrc,
 												fontSrc: (!fontSrc.includes("'unsafe-inline'") && !fontSrc.includes("'none'"))?fontSrc.concat(nonceArray):fontSrc,
 												imgSrc: (!imgSrc.includes("'unsafe-inline'") && !imgSrc.includes("'none'"))?imgSrc.concat(nonceArray):imgSrc,
-												objectSrc: (!objectSrc.includes("'unsafe-inline'") && !objectSrc.includes("'none'"))?objectSrc.concat(nonceArray):objectSrc
+												objectSrc: (!objectSrc.includes("'unsafe-inline'") && !objectSrc.includes("'none'"))?objectSrc.concat(nonceArray):objectSrc,
+												frameSrc: (!frameSrc.includes("'unsafe-inline'") && !frameSrc.includes("'none'"))?frameSrc.concat(nonceArray):frameSrc
 											},
 
 											sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
