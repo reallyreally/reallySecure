@@ -1,0 +1,35 @@
+{
+  "csp":{
+    "fontSrc":[
+      "'self'"
+    ],
+    "imgSrc":[
+      "'self'",
+      "data:",
+      "www.google-analytics.com",
+      "stats.g.doubleclick.net",
+      "www.google.com"
+    ],
+    "defaultSrc":[
+      "'self'"
+    ],
+    "reportUri":"/v1/cspreport",
+    "styleSrc":[
+      "'self'"
+    ],
+    "scriptSrc":[
+      "'self'",
+      "www.googletagmanager.com",
+      "tagmanager.google.com",
+      "www.google-analytics.com"
+    ],
+    "upgradeInsecureRequests":true
+  },
+  "hsts":{
+    "maxAge":10886400,
+    "includeSubDomains":true,
+    "preload":true,
+    "force":true
+  },
+  "poweredBy":"really-secure"
+}

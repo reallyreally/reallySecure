@@ -63,7 +63,7 @@ Now add it to the application flow
 app.use(securityLayer(reallySecureConfig));
 ```
 
-**Using Google Cloud App Engine?**
+**Using A Load Balancer? (Like Google App Engine)**
 
 You will need to trust the proxy or you will end up with SSL issues.
 
@@ -71,6 +71,11 @@ You will need to trust the proxy or you will end up with SSL issues.
 // Trust App Engine proxy
 app.enable('trust proxy')
 ```
+
+**A Node about NODE_ENV**
+
+Many of the security requirements that force or require SSL (like HSTS) are ignored unless you are `NODE_ENV=production`
+This is a conscious choice to enable local development (without SSL) but retain security when deployed with little to no interaction.
 
 ### Example app.js
 

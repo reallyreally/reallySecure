@@ -6,8 +6,7 @@ var csp = require('helmet-csp');
 var uuid = require('node-uuid');
 var parseDomain = require("parse-domain");
 
-// From http://jsfiddle.net/DanielD/8S4nq/
-var isIPv4v6 = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+var isIPv4v6 = /^(((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5]))|([\da-fA-F]{1,4}(\:[\da-fA-F]{1,4}){7})|(([\da-fA-F]{1,4}:){0,5}::([\da-fA-F]{1,4}:){0,5}[\da-fA-F]{1,4})$/;
 
 module.exports = function reallySecure(options) {
 	options = options || {}
@@ -44,13 +43,15 @@ module.exports = function reallySecure(options) {
 										if (options.csp === undefined) options.csp = {};
 
 										var defaultSrc = (options.csp.defaultSrc) ? JSON.parse(JSON.stringify(options.csp.defaultSrc)) : ["'self'"];
-										var connectSrc = (options.csp.connectSrc) ? JSON.parse(JSON.stringify(options.csp.connectSrc)) : ["'self'"];
 										var scriptSrc = (options.csp.scriptSrc) ? JSON.parse(JSON.stringify(options.csp.scriptSrc)) : ["'self'"];
 										var styleSrc = (options.csp.styleSrc) ? JSON.parse(JSON.stringify(options.csp.styleSrc)) : ["'self'"];
-										var fontSrc = (options.csp.fontSrc) ? JSON.parse(JSON.stringify(options.csp.fontSrc)) : ["'self'"];
 										var imgSrc = (options.csp.imgSrc) ? JSON.parse(JSON.stringify(options.csp.imgSrc)) : ["'self'"];
+										var connectSrc = (options.csp.connectSrc) ? JSON.parse(JSON.stringify(options.csp.connectSrc)) : ["'self'"];
+										var fontSrc = (options.csp.fontSrc) ? JSON.parse(JSON.stringify(options.csp.fontSrc)) : ["'self'"];
 										var objectSrc = (options.csp.objectSrc) ? JSON.parse(JSON.stringify(options.csp.objectSrc)) : ["'none'"];
-										var frameSrc = (options.csp.frameSrc) ? JSON.parse(JSON.stringify(options.csp.frameSrc)) : ["'none'"];
+										var mediaSrc = (options.csp.mediaSrc) ? JSON.parse(JSON.stringify(options.csp.mediaSrc)) : ["'none'"];
+										var frameSrc = (options.csp.frameSrc) ? JSON.parse(JSON.stringify(options.csp.frameSrc)) : ["'none'"]; //Deprecated
+										var childSrc = (options.csp.childSrc) ? JSON.parse(JSON.stringify(options.csp.childSrc)) : ["'none'"];
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
@@ -65,11 +66,15 @@ module.exports = function reallySecure(options) {
 
 										if (!noSubs.includes(hostname) && !isIPv4v6.test(hostname)) {
 											if (defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
-											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
 											if (scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
 											if (styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
-											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
 											if (imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
+											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
+											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
+											if (objectSrc.indexOf("embed." + hostname) === -1) objectSrc.push("embed." + hostname);
+											if (mediaSrc.indexOf("media." + hostname) === -1) mediaSrc.push("media." + hostname);
+											if (frameSrc.indexOf("iframe." + hostname) === -1) frameSrc.push("iframe." + hostname); //Deprecated
+											if (childSrc.indexOf("iframe." + hostname) === -1) childSrc.push("iframe." + hostname);
 										}
 
 										if (hostname === 'localhost') {
@@ -80,13 +85,15 @@ module.exports = function reallySecure(options) {
 											// Specify directives as normal.
 											directives: {
 												defaultSrc: (!defaultSrc.includes("'unsafe-inline'") && !defaultSrc.includes("'none'"))?defaultSrc.concat(nonceArray):defaultSrc,
-												connectSrc: (!connectSrc.includes("'unsafe-inline'") && !connectSrc.includes("'none'"))?connectSrc.concat(nonceArray):connectSrc,
 												scriptSrc: (!scriptSrc.includes("'unsafe-inline'") && !scriptSrc.includes("'none'"))?scriptSrc.concat(nonceArray):scriptSrc,
 												styleSrc: (!styleSrc.includes("'unsafe-inline'") && !styleSrc.includes("'none'"))?styleSrc.concat(nonceArray):styleSrc,
-												fontSrc: (!fontSrc.includes("'unsafe-inline'") && !fontSrc.includes("'none'"))?fontSrc.concat(nonceArray):fontSrc,
 												imgSrc: (!imgSrc.includes("'unsafe-inline'") && !imgSrc.includes("'none'"))?imgSrc.concat(nonceArray):imgSrc,
+												connectSrc: (!connectSrc.includes("'unsafe-inline'") && !connectSrc.includes("'none'"))?connectSrc.concat(nonceArray):connectSrc,
+												fontSrc: (!fontSrc.includes("'unsafe-inline'") && !fontSrc.includes("'none'"))?fontSrc.concat(nonceArray):fontSrc,
 												objectSrc: (!objectSrc.includes("'unsafe-inline'") && !objectSrc.includes("'none'"))?objectSrc.concat(nonceArray):objectSrc,
-												frameSrc: (!frameSrc.includes("'unsafe-inline'") && !frameSrc.includes("'none'"))?frameSrc.concat(nonceArray):frameSrc
+												mediaSrc: (!mediaSrc.includes("'unsafe-inline'") && !mediaSrc.includes("'none'"))?mediaSrc.concat(nonceArray):mediaSrc,
+												frameSrc: (!frameSrc.includes("'unsafe-inline'") && !frameSrc.includes("'none'"))?frameSrc.concat(nonceArray):frameSrc,
+												childSrc: (!childSrc.includes("'unsafe-inline'") && !childSrc.includes("'none'"))?childSrc.concat(nonceArray):childSrc
 											},
 
 											sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
