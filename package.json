@@ -16,10 +16,12 @@
     "middleware"
   ],
   "author": "Troy Kelly <troy.kelly@reallyreally.io>",
-  "contributors": [{
-    "name": "Daniel Walton",
-    "email": "daniel.walton@reallyreally.io"
-    }],
+  "contributors": [
+    {
+      "name": "Daniel Walton",
+      "email": "daniel.walton@reallyreally.io"
+    }
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/reallyreally/reallySecure/issues"
@@ -27,9 +29,9 @@
   "homepage": "https://github.com/reallyreally/reallySecure#readme",
   "dependencies": {
     "express-sslify": "^1.2.0",
-    "helmet": "^3.4.1",
-    "helmet-csp": "^2.3.0",
-    "node-uuid": "^1.4.7",
+    "helmet": "^3.8.1",
+    "helmet-csp": "^2.5.1",
+    "node-uuid": "^1.4.8",
     "parse-domain": "^1.1.0"
   }
 }

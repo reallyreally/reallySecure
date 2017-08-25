@@ -6,8 +6,12 @@ var csp = require('helmet-csp');
 var uuid = require('node-uuid');
 var parseDomain = require("parse-domain");
 
+// From http://jsfiddle.net/DanielD/8S4nq/
+var isIPv4v6 = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))|(^\s*((?=.{1,255}$)(?=.*[A-Za-z].*)[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|\b-){0,61}[0-9A-Za-z])?)*)\s*$)/;
+
 module.exports = function reallySecure(options) {
 	options = options || {}
+	if (options.csp === undefined) options.csp = {};
 
 	return function reallySecure(req, res, next) {
 
@@ -39,14 +43,14 @@ module.exports = function reallySecure(options) {
 									helmet.xssFilter()(req, res, function() {
 										if (options.csp === undefined) options.csp = {};
 
-										var defaultSrc = options.csp.defaultSrc || ["'self'"];
-										var connectSrc = options.csp.connectSrc || ["'self'"];
-										var scriptSrc = options.csp.scriptSrc || ["'self'"];
-										var styleSrc = options.csp.styleSrc || ["'self'"];
-										var fontSrc = options.csp.fontSrc || ["'self'"];
-										var imgSrc = options.csp.imgSrc || ["'self'"];
-										var objectSrc = options.csp.objectSrc || ["'none'"];
-										var frameSrc = options.csp.frameSrc || ["'none'"];
+										var defaultSrc = JSON.parse(JSON.stringify(options.csp.defaultSrc)) || ["'self'"];
+										var connectSrc = JSON.parse(JSON.stringify(options.csp.connectSrc)) || ["'self'"];
+										var scriptSrc = JSON.parse(JSON.stringify(options.csp.scriptSrc)) || ["'self'"];
+										var styleSrc = JSON.parse(JSON.stringify(options.csp.styleSrc)) || ["'self'"];
+										var fontSrc = JSON.parse(JSON.stringify(options.csp.fontSrc)) || ["'self'"];
+										var imgSrc = JSON.parse(JSON.stringify(options.csp.imgSrc)) || ["'self'"];
+										var objectSrc = JSON.parse(JSON.stringify(options.csp.objectSrc)) || ["'none'"];
+										var frameSrc = JSON.parse(JSON.stringify(options.csp.frameSrc)) || ["'none'"];
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
@@ -59,7 +63,7 @@ module.exports = function reallySecure(options) {
 
 										var noSubs = ['localhost', 'appspot.com'];
 
-										if (!noSubs.includes(hostname)) {
+										if (!noSubs.includes(hostname) && !isIPv4v6.test(hostname)) {
 											if (defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
 											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
 											if (scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
