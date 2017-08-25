@@ -71,10 +71,11 @@ module.exports = function reallySecure(options) {
 											if (imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
 											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
 											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
-											if (objectSrc.indexOf("embed." + hostname) === -1) objectSrc.push("embed." + hostname);
-											if (mediaSrc.indexOf("media." + hostname) === -1) mediaSrc.push("media." + hostname);
-											if (frameSrc.indexOf("iframe." + hostname) === -1) frameSrc.push("iframe." + hostname); //Deprecated
-											if (childSrc.indexOf("iframe." + hostname) === -1) childSrc.push("iframe." + hostname);
+											// Leaving the below - as our default is 'none'
+											// if (objectSrc.indexOf("embed." + hostname) === -1) objectSrc.push("embed." + hostname);
+											// if (mediaSrc.indexOf("media." + hostname) === -1) mediaSrc.push("media." + hostname);
+											// if (frameSrc.indexOf("iframe." + hostname) === -1) frameSrc.push("iframe." + hostname); //Deprecated
+											// if (childSrc.indexOf("iframe." + hostname) === -1) childSrc.push("iframe." + hostname);
 										}
 
 										if (hostname === 'localhost') {
