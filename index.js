@@ -43,14 +43,14 @@ module.exports = function reallySecure(options) {
 									helmet.xssFilter()(req, res, function() {
 										if (options.csp === undefined) options.csp = {};
 
-										var defaultSrc = JSON.parse(JSON.stringify(options.csp.defaultSrc)) || ["'self'"];
-										var connectSrc = JSON.parse(JSON.stringify(options.csp.connectSrc)) || ["'self'"];
-										var scriptSrc = JSON.parse(JSON.stringify(options.csp.scriptSrc)) || ["'self'"];
-										var styleSrc = JSON.parse(JSON.stringify(options.csp.styleSrc)) || ["'self'"];
-										var fontSrc = JSON.parse(JSON.stringify(options.csp.fontSrc)) || ["'self'"];
-										var imgSrc = JSON.parse(JSON.stringify(options.csp.imgSrc)) || ["'self'"];
-										var objectSrc = JSON.parse(JSON.stringify(options.csp.objectSrc)) || ["'none'"];
-										var frameSrc = JSON.parse(JSON.stringify(options.csp.frameSrc)) || ["'none'"];
+										var defaultSrc = (options.csp.defaultSrc) ? JSON.parse(JSON.stringify(options.csp.defaultSrc)) : ["'self'"];
+										var connectSrc = (options.csp.connectSrc) ? JSON.parse(JSON.stringify(options.csp.connectSrc)) : ["'self'"];
+										var scriptSrc = (options.csp.scriptSrc) ? JSON.parse(JSON.stringify(options.csp.scriptSrc)) : ["'self'"];
+										var styleSrc = (options.csp.styleSrc) ? JSON.parse(JSON.stringify(options.csp.styleSrc)) : ["'self'"];
+										var fontSrc = (options.csp.fontSrc) ? JSON.parse(JSON.stringify(options.csp.fontSrc)) : ["'self'"];
+										var imgSrc = (options.csp.imgSrc) ? JSON.parse(JSON.stringify(options.csp.imgSrc)) : ["'self'"];
+										var objectSrc = (options.csp.objectSrc) ? JSON.parse(JSON.stringify(options.csp.objectSrc)) : ["'none'"];
+										var frameSrc = (options.csp.frameSrc) ? JSON.parse(JSON.stringify(options.csp.frameSrc)) : ["'none'"];
 
 										var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
