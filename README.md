@@ -10,6 +10,10 @@ This package has been built for our specific needs. Your mileage may vary. Be ve
 
 This package is called while instantiating your ExpressJS based application. It is not a stand-alone package.
 
+### Glitch
+
+You can check this out on [Glitch](https://glitch.com/edit/#!/really-secure) - see working code examples, and test it yourself without any effort!
+
 ### Installing
 
 Assuming you are starting an ExpressJS project from scratch.
