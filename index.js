@@ -73,7 +73,7 @@ module.exports = function reallySecure(options) {
 											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
 										}
 
-										if (hostname === 'localhost') {
+										if (hostname === 'localhost' || process.env.NODE_ENV === 'development') {
 											upgradeInsecureRequests = false;
 										}
 
