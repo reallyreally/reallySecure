@@ -1,6 +1,6 @@
 {
   "name": "@really/really-secure",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Comprehensive ExpressJS Security Middleware",
   "main": "index.js",
   "scripts": {
