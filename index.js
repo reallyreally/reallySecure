@@ -35,8 +35,12 @@ module.exports = function reallySecure(options) {
 							// Sets "X-Content-Type-Options: nosniff".
 							helmet.noSniff()(req, res, function() {
 								// Sets "Referrer-Policy: same-origin".
+								var referrerPolicy = 'strict-origin-when-cross-origin';
+								if(options.referrer_policy){
+									referrerPolicy = options.referrer_policy;
+								}
 								helmet.referrerPolicy({
-									policy: 'origin-when-cross-origin'
+									policy: referrerPolicy
 								})(req, res, function() {
 									// Sets "X-XSS-Protection: 1; mode=block".
 									helmet.xssFilter()(req, res, function() {
