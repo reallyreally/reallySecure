@@ -68,14 +68,17 @@ module.exports = function reallySecure(options) {
 
 										var noSubs = ['localhost', 'appspot.com'];
 
+										/**
+										 * Removed header bloat - define them if you need them
 										if (!noSubs.includes(hostname) && !isIPv4v6.test(hostname)) {
 											if (defaultSrc.indexOf("api." + hostname) === -1) defaultSrc.push("api." + hostname);
 											if (scriptSrc.indexOf("script." + hostname) === -1) scriptSrc.push("script." + hostname);
-											if (styleSrc.indexOf("sytle." + hostname) === -1) styleSrc.push("sytle." + hostname);
+											if (styleSrc.indexOf("style." + hostname) === -1) styleSrc.push("style." + hostname);
 											if (imgSrc.indexOf("img." + hostname) === -1) imgSrc.push("img." + hostname);
 											if (connectSrc.indexOf("data." + hostname) === -1) connectSrc.push("data." + hostname);
 											if (fontSrc.indexOf("font." + hostname) === -1) fontSrc.push("font." + hostname);
 										}
+										**/
 
 										if (hostname === 'localhost' || process.env.NODE_ENV === 'development') {
 											upgradeInsecureRequests = false;
