@@ -1,3 +1,5 @@
+[![Known Vulnerabilities](https://snyk.io/test/github/reallyreally/reallySecure:package.json/badge.svg?targetFile=package.json)](https://snyk.io/test/github/reallyreally/reallySecure:package.json?targetFile=package.json)
+
 # ExpressJS Security Layer
 
 Introduces comprehensive security for your ExpressJS based application.
