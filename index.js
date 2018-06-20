@@ -8,8 +8,6 @@ const csp = require('helmet-csp');
 const uuidv4 = require('uuid/v4');
 const parseDomain = require("parse-domain");
 
-var isIPv4v6 = /^(((([1]?\d)?\d|2[0-4]\d|25[0-5])\.){3}(([1]?\d)?\d|2[0-4]\d|25[0-5]))|([\da-fA-F]{1,4}(\:[\da-fA-F]{1,4}){7})|(([\da-fA-F]{1,4}:){0,5}::([\da-fA-F]{1,4}:){0,5}[\da-fA-F]{1,4})$/;
-
 module.exports = function reallySecure(options) {
   options = options || {};
   if (options.csp === undefined) options.csp = {};
@@ -17,7 +15,7 @@ module.exports = function reallySecure(options) {
   return function reallySecure(req, res, next) {
 
     var makeSecure = function() {
-      res.locals.nonce = uuidv4();
+      res.locals.nonce = Buffer.from(uuidv4()).toString('base64');
       var nonceArray = ["'nonce-" + res.locals.nonce + "'"];
       // Sets "X-DNS-Prefetch-Control: on".
       helmet.dnsPrefetchControl({
@@ -58,11 +56,12 @@ module.exports = function reallySecure(options) {
                     var mediaSrc = (options.csp.mediaSrc) ? JSON.parse(JSON.stringify(options.csp.mediaSrc)) : ["'none'"];
                     var frameSrc = (options.csp.frameSrc) ? JSON.parse(JSON.stringify(options.csp.frameSrc)) : ["'none'"]; //Deprecated
                     var childSrc = (options.csp.childSrc) ? JSON.parse(JSON.stringify(options.csp.childSrc)) : ["'none'"];
+                    var baseUri = (options.csp.baseUri) ? JSON.parse(JSON.stringify(options.csp.baseUri)) : ["'none'"];
 
                     var upgradeInsecureRequests = options.csp.upgradeInsecureRequests || true;
 
                     var hostnameParts = parseDomain(req.hostname);
-										let hostname;
+                    let hostname;
                     if (hostnameParts) {
                       hostname = hostnameParts.domain + '.' + hostnameParts.tld;
                     } else {
@@ -87,11 +86,13 @@ module.exports = function reallySecure(options) {
                         objectSrc: (!objectSrc.includes("'unsafe-inline'") && !objectSrc.includes("'none'")) ? objectSrc.concat(nonceArray) : objectSrc,
                         mediaSrc: (!mediaSrc.includes("'unsafe-inline'") && !mediaSrc.includes("'none'")) ? mediaSrc.concat(nonceArray) : mediaSrc,
                         frameSrc: (!frameSrc.includes("'unsafe-inline'") && !frameSrc.includes("'none'")) ? frameSrc.concat(nonceArray) : frameSrc,
-                        childSrc: (!childSrc.includes("'unsafe-inline'") && !childSrc.includes("'none'")) ? childSrc.concat(nonceArray) : childSrc
+                        childSrc: (!childSrc.includes("'unsafe-inline'") && !childSrc.includes("'none'")) ? childSrc.concat(nonceArray) : childSrc,
+                        baseUri: baseUri
                       },
 
                       sandbox: options.csp.sandbox || ['allow-forms', 'allow-scripts'],
                       reportUri: options.csp.reportUri || '/report-violation',
+
 
                       // This module will detect common mistakes in your directives and throw errors
                       // if it finds any. To disable this, enable "loose mode".
