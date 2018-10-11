@@ -1,6 +1,6 @@
 {
   "name": "@really/really-secure",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Comprehensive ExpressJS Security Middleware",
   "main": "index.js",
   "scripts": {
@@ -29,9 +29,9 @@
   "homepage": "https://github.com/reallyreally/reallySecure#readme",
   "dependencies": {
     "express-sslify": "^1.2.0",
-    "helmet": "^3.12.1",
-    "helmet-csp": "^2.7.0",
+    "helmet": "^3.14.0",
+    "helmet-csp": "^2.7.1",
     "parse-domain": "^2.1.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.3.2"
   }
 }
