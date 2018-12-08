@@ -31,7 +31,7 @@
     "express-sslify": "^1.2.0",
     "helmet": "^3.14.0",
     "helmet-csp": "^2.7.1",
-    "parse-domain": "^2.1.2",
+    "parse-domain": "^2.1.7",
     "uuid": "^3.3.2"
   }
 }
