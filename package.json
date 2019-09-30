@@ -29,8 +29,8 @@
   "homepage": "https://github.com/reallyreally/reallySecure#readme",
   "dependencies": {
     "express-sslify": "^1.2.0",
-    "helmet": "^3.14.0",
-    "helmet-csp": "^2.7.1",
+    "helmet": "^3.21.1",
+    "helmet-csp": "^2.9.2",
     "parse-domain": "^2.1.2",
     "uuid": "^3.3.2"
   }
