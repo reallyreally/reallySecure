@@ -4,7 +4,9 @@
   "description": "Comprehensive ExpressJS Security Middleware",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "yarn run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -31,7 +33,9 @@
     "express-sslify": "^1.2.0",
     "helmet": "^3.22.0",
     "helmet-csp": "^2.10.0",
-    "parse-domain": "^2.3.4",
-    "uuid": "^7.0.3"
-  }
+    "parse-domain": "^3.0.0",
+    "uuid": "^7.0.3",
+    "@snyk/protect": "latest"
+  },
+  "snyk": true
 }
